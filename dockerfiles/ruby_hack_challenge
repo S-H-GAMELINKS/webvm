@@ -12,8 +12,7 @@ RUN useradd -m -s /bin/bash user && echo "user:password" | chpasswd
 USER user
 WORKDIR /home/user
 
-ARG RUBY_REF=v3_3_5
-RUN git clone --depth 1 --branch "${RUBY_REF}" https://github.com/ruby/ruby.git ~/ruby
+RUN mkdir ~/rubydev/build -p && cd ~/rubydev && git clone --depth 1 https://github.com/ruby/ruby.git && cd ruby && ./autogen.sh
 
 ENV HOME=/home/user TERM=xterm USER=user SHELL=/bin/bash LANG=en_US.UTF-8 LC_ALL=C
 
