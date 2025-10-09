@@ -2,7 +2,7 @@ FROM i386/ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get clean && apt-get update && apt-get -y upgrade && apt-get install -y --no-install-recommends \
-    git ruby autoconf gcc make zlib1g-dev libffi-dev libreadline-dev \
+    git ruby autoconf gcc make m4 zlib1g-dev libffi-dev libreadline-dev \
     libgdbm-dev libssl-dev libyaml-dev \
     build-essential pkg-config \
     vim \
