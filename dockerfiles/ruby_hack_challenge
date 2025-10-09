@@ -12,7 +12,7 @@ RUN useradd -m -s /bin/bash user && echo "user:password" | chpasswd
 USER user
 WORKDIR /home/user
 
-RUN mkdir -p ~/rubydev && cd ~/rubydev \
+RUN mkdir -p ~/rubydev/ruby && cd ~/rubydev/ruby \
  && curl -L https://cache.ruby-lang.org/pub/ruby/snapshot/snapshot-master.tar.gz \
     -o ruby.tar.gz \
  && tar -xzf ruby.tar.gz --strip-components=1 -C . \
