@@ -12,15 +12,7 @@ RUN useradd -m -s /bin/bash user && echo "user:password" | chpasswd
 USER user
 WORKDIR /home/user
 
-RUN mkdir -p ~/rubydev/ruby && cd ~/rubydev/ruby \
- && curl -L https://cache.ruby-lang.org/pub/ruby/snapshot/snapshot-master.tar.gz \
-    -o ruby.tar.gz \
- && tar -xzf ruby.tar.gz --strip-components=1 -C . \
- && rm ruby.tar.gz
-
-# configure まで実行しておく（autogen.sh不要）
-RUN mkdir ~/rubydev/build && cd ~/rubydev/build \
- && ../ruby/configure --prefix=$PWD/../install --enable-shared
+RUN mkdir ~/rubydev/build -p && cd ~/rubydev && git clon https://github.com/ruby/ruby.git && cd ruby && ./autogen.sh && cd ~/rubydev/build && ../ruby/configure --prefix=$PWD/../install --enable-shared
 
 ENV HOME=/home/user TERM=xterm USER=user SHELL=/bin/bash LANG=en_US.UTF-8 LC_ALL=C
 
