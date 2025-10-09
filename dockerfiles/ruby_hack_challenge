@@ -12,7 +12,7 @@ RUN useradd -m -s /bin/bash user && echo "user:password" | chpasswd
 USER user
 WORKDIR /home/user
 
-RUN mkdir ~/rubydev/build -p && cd ~/rubydev && git clone --depth 1 https://github.com/ruby/ruby.git && cd ruby && ./autogen.sh
+RUN mkdir ~/rubydev/build -p && cd ~/rubydev && git clone --depth 1 https://github.com/ruby/ruby.git && cd ruby && ./autogen.sh && cd ~/rubydev/build && ../ruby/configure --prefix=$PWD/../install --enable-shared
 
 ENV HOME=/home/user TERM=xterm USER=user SHELL=/bin/bash LANG=en_US.UTF-8 LC_ALL=C
 
