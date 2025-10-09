@@ -5,14 +5,22 @@ RUN apt-get clean && apt-get update && apt-get -y upgrade && apt-get install -y 
     git ruby autoconf gcc make m4 zlib1g-dev libffi-dev libreadline-dev \
     libgdbm-dev libssl-dev libyaml-dev \
     build-essential pkg-config \
-    vim \
+    vim curl ca-certificates xz-utils \
  && rm -rf /var/lib/apt/lists/* /usr/share/doc/* /usr/share/man/* /usr/share/locale/*
 
 RUN useradd -m -s /bin/bash user && echo "user:password" | chpasswd
 USER user
 WORKDIR /home/user
 
-RUN mkdir ~/rubydev/build -p && cd ~/rubydev && git clone --depth 1 https://github.com/ruby/ruby.git && cd ruby && ./autogen.sh && cd ~/rubydev/build && ../ruby/configure --prefix=$PWD/../install --enable-shared
+RUN mkdir -p ~/rubydev && cd ~/rubydev \
+ && curl -L https://cache.ruby-lang.org/pub/ruby/snapshot/snapshot-master.tar.gz \
+    -o ruby.tar.gz \
+ && tar -xzf ruby.tar.gz --strip-components=1 -C . \
+ && rm ruby.tar.gz
+
+# configure まで実行しておく（autogen.sh不要）
+RUN mkdir ~/rubydev/build && cd ~/rubydev/build \
+ && ../ruby/configure --prefix=$PWD/../install --enable-shared
 
 ENV HOME=/home/user TERM=xterm USER=user SHELL=/bin/bash LANG=en_US.UTF-8 LC_ALL=C
 
