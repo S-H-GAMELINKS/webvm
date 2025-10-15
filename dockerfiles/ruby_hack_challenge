@@ -5,16 +5,18 @@ RUN apt-get clean && apt-get update && apt-get -y upgrade && apt-get install -y 
     git ruby autoconf gcc make m4 zlib1g-dev libffi-dev libreadline-dev \
     libgdbm-dev libssl-dev libyaml-dev \
     build-essential pkg-config \
-    vim curl ca-certificates xz-utils \
+    vim curl ca-certificates xz-utils ccache \
  && rm -rf /var/lib/apt/lists/* /usr/share/doc/* /usr/share/man/* /usr/share/locale/*
 
 RUN useradd -m -s /bin/bash user && echo "user:password" | chpasswd
 USER user
 WORKDIR /home/user
 
-RUN mkdir ~/rubydev/build -p && cd ~/rubydev && git clone --depth 50 https://github.com/ruby/ruby.git && cd ruby && ./autogen.sh && cd ~/rubydev/build && ../ruby/configure --prefix=$PWD/../install --enable-shared
+RUN mkdir ~/rubydev/build -p && cd ~/rubydev && git clone --depth 50 https://github.com/ruby/ruby.git && cd ruby && ./autogen.sh
 
-ENV HOME=/home/user TERM=xterm USER=user SHELL=/bin/bash LANG=en_US.UTF-8 LC_ALL=C
+RUN cd ~/rubydev/build && \
+    ../ruby/configure --prefix=$PWD/../install --enable-shared --disable-install-doc && \
+    make -j4 && \
+    make install
 
 CMD ["/bin/bash"]
-
