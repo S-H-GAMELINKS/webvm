@@ -12,11 +12,14 @@ RUN useradd -m -s /bin/bash user && echo "user:password" | chpasswd
 USER user
 WORKDIR /home/user
 
-RUN mkdir ~/rubydev/build -p && cd ~/rubydev && git clone --depth 10 https://github.com/ruby/ruby.git && cd ruby && ./autogen.sh
+RUN set -eux; \
+  mkdir -p /home/user/rubydev/ruby; \
+  curl -L https://cache.ruby-lang.org/pub/ruby/snapshot/snapshot-master.tar.gz -o /tmp/ruby.tgz; \
+  tar -xzf /tmp/ruby.tgz --strip-components=1 -C /home/user/rubydev/ruby; \
+  rm /tmp/ruby.tgz; \
+  mkdir -p /home/user/rubydev/build; \
+  cd /home/user/rubydev/build; \
+  ../ruby/configure --prefix="$PWD/../install" --enable-shared --disable-install-doc VCS=none
 
-RUN cd ~/rubydev/build && \
-    ../ruby/configure --prefix=$PWD/../install --enable-shared --disable-install-doc && \
-    make -j4 && \
-    make install
 
 CMD ["/bin/bash"]
