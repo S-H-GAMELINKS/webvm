@@ -16,7 +16,6 @@ RUN mkdir ~/rubydev/build -p && cd ~/rubydev && git clone --depth 50 https://git
 
 RUN cd ~/rubydev/build && \
     ../ruby/configure --prefix=$PWD/../install --enable-shared --disable-install-doc && \
-    make -j4 && \
-    make install
+    make -j4
 
 CMD ["/bin/bash"]
