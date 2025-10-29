@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential autoconf bison pkg-config \
     zlib1g-dev libssl-dev libyaml-dev libreadline-dev \
     libgdbm-dev libgdbm-compat-dev libffi-dev libncurses5-dev \
-    git curl ca-certificates xz-utils ruby \
+    git curl ca-certificates xz-utils \
  && rm -rf /var/lib/apt/lists/* /usr/share/doc/* /usr/share/man/* /usr/share/locale/*
 
 RUN useradd -m -s /bin/bash user && echo "user:password" | chpasswd
@@ -17,7 +17,8 @@ RUN mkdir -p ~/rubydev && cd ~/rubydev \
  && git clone --depth 5 https://github.com/ruby/ruby.git ruby
 
 RUN cd ~/rubydev/ruby && ./autogen.sh && \
-    ./configure --prefix=$PWD/../install --enable-shared --disable-install-doc
+    ./configure --prefix=$PWD/../install --enable-shared --disable-install-doc && make
 
 ENV HOME=/home/user TERM=xterm USER=user SHELL=/bin/bash LANG=C.UTF-8 LC_ALL=C.UTF-8
+
 CMD ["/bin/bash"]
