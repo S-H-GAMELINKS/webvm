@@ -3,10 +3,10 @@ FROM i386/debian:bookworm
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential autoconf bison pkg-config m4 gawk \
+    build-essential autoconf bison pkg-config \
     zlib1g-dev libssl-dev libyaml-dev libreadline-dev \
     libgdbm-dev libgdbm-compat-dev libffi-dev libncurses5-dev \
-    git curl ca-certificates xz-utils \
+    git curl ca-certificates xz-utils ruby \
  && rm -rf /var/lib/apt/lists/* /usr/share/doc/* /usr/share/man/* /usr/share/locale/*
 
 RUN useradd -m -s /bin/bash user && echo "user:password" | chpasswd
@@ -16,17 +16,8 @@ WORKDIR /home/user
 RUN mkdir -p ~/rubydev && cd ~/rubydev \
  && git clone --depth 5 https://github.com/ruby/ruby.git ruby
 
-USER root
-RUN apt-get update && apt-get install -y --no-install-recommends ruby && \
-    cd /home/user/rubydev/ruby && \
-    sudo -u user ./autogen.sh && \
-    sudo -u user ./configure --prefix=/home/user/rubydev/install \
-      --enable-shared --disable-install-doc \
-      --disable-yjit --disable-jit-support && \
-    sudo -u user make -j1 && \
-    apt-get purge -y ruby && apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/* /usr/share/doc/* /usr/share/man/* /usr/share/locale/*
+RUN cd ~/rubydev/ruby && ./autogen.sh && \
+    ./configure --prefix=$PWD/../install --enable-shared --disable-install-doc
 
-USER user
 ENV HOME=/home/user TERM=xterm USER=user SHELL=/bin/bash LANG=C.UTF-8 LC_ALL=C.UTF-8
 CMD ["/bin/bash"]
