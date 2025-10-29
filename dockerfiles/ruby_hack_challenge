@@ -17,14 +17,14 @@ RUN mkdir -p ~/rubydev && cd ~/rubydev \
  && git clone --depth 5 https://github.com/ruby/ruby.git ruby
 
 USER root
-RUN apt-get update && apt-get install -y --no-install-recommends ruby-minimal && \
+RUN apt-get update && apt-get install -y --no-install-recommends ruby && \
     cd /home/user/rubydev/ruby && \
     sudo -u user ./autogen.sh && \
     sudo -u user ./configure --prefix=/home/user/rubydev/install \
       --enable-shared --disable-install-doc \
       --disable-yjit --disable-jit-support && \
     sudo -u user make -j1 && \
-    apt-get purge -y ruby-minimal && apt-get autoremove -y && \
+    apt-get purge -y ruby && apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* /usr/share/doc/* /usr/share/man/* /usr/share/locale/*
 
 USER user
