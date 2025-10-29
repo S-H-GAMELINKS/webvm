@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential autoconf bison pkg-config \
     zlib1g-dev libssl-dev libyaml-dev libreadline-dev \
     libgdbm-dev libgdbm-compat-dev libffi-dev libncurses5-dev \
-    git curl ca-certificates xz-utils \
+    git curl ca-certificates xz-utils ruby\
  && rm -rf /var/lib/apt/lists/* /usr/share/doc/* /usr/share/man/* /usr/share/locale/*
 
 RUN useradd -m -s /bin/bash user && echo "user:password" | chpasswd
