@@ -23,6 +23,7 @@ RUN mkdir -p ~/rubydev && cd ~/rubydev \
 
 RUN cd ~/rubydev/ruby \
  && ./autogen.sh \
- && ./configure --prefix=$PWD/../install --enable-shared --disable-install-doc
+ && ./configure --prefix=$PWD/../install --enable-shared --disable-install-doc \
+ && make
 
 CMD ["/bin/sh"]
