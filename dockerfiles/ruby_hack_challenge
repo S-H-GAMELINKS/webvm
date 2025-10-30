@@ -26,4 +26,6 @@ RUN cd ~/rubydev/ruby \
  && ./configure --prefix=$PWD/../install --enable-shared --disable-install-doc \
  && make
 
+RUN chown -R user:user /home/user
+
 CMD ["/bin/sh"]
